@@ -5,17 +5,28 @@ app = Flask(__name__)
 
 # Function to fetch live cryptocurrency prices
 def fetch_crypto_prices():
-    url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=false"
-    response = requests.get(url)
-    if response.status_code == 200:
-        data = response.json()
-        prices = {}
-        for coin in data:
-            prices[coin['name']] = coin['current_price']
-        return prices
-    else:
+    url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=30&page=1&sparkline=false"
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            data = response.json()
+            prices = {}
+            for coin in data:
+                prices[coin['name']] = coin['current_price']
+            return prices
+        else:
+            return {coin: "Error fetching price" for coin in [
+                "Bitcoin", "Ethereum", "Tether", "BNB", "Solana", "USDC", "XRP", "Dogecoin", "Toncoin", "Cardano", 
+                "TRON", "Avalanche", "Shiba Inu", "Polygon", "Polkadot", "Chainlink", "Bitcoin Cash", "NEAR Protocol",
+                "Uniswap", "Litecoin", "Dai", "Internet Computer", "Kaspa", "Ethereum Classic", "Monero", "Stellar",
+                "OKB", "Filecoin", "Mantle", "Arbitrum"
+            ]}
+    except requests.exceptions.RequestException:
         return {coin: "Error fetching price" for coin in [
-            "Bitcoin", "Ethereum", "Tether", "BNB", "Solana", "USDC", "XRP", "Dogecoin", "Toncoin", "Cardano"
+            "Bitcoin", "Ethereum", "Tether", "BNB", "Solana", "USDC", "XRP", "Dogecoin", "Toncoin", "Cardano", 
+            "TRON", "Avalanche", "Shiba Inu", "Polygon", "Polkadot", "Chainlink", "Bitcoin Cash", "NEAR Protocol",
+            "Uniswap", "Litecoin", "Dai", "Internet Computer", "Kaspa", "Ethereum Classic", "Monero", "Stellar",
+            "OKB", "Filecoin", "Mantle", "Arbitrum"
         ]}
 
 @app.route('/')
